@@ -1,26 +1,306 @@
 @import "tailwindcss";
+@import "tw-animate-css";
 
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* CSS Variables */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: 222.2 84% 4.9%;
+  --foreground: 210 40% 98%;
+  --radius: 0.5rem;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+html {
+  scroll-behavior: smooth;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* Premium dark theme base */
+body {
+  background-color: #03071e;
+  color: #e2e8f0;
+  overflow-x: hidden;
+  background-image: 
+    radial-gradient(ellipse 80% 80% at 50% -20%, rgba(147, 51, 234, 0.1), rgba(147, 51, 234, 0) 50%),
+    radial-gradient(ellipse 80% 80% at 80% 20%, rgba(6, 214, 214, 0.08), rgba(6, 214, 214, 0) 50%);
+  background-attachment: fixed;
+}
+
+/* Subtle noise texture overlay */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' seed='2' /%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23noiseFilter)' opacity='0.02'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Ensure content is above the noise */
+* {
+  position: relative;
+  z-index: 2;
+}
+
+html,
+body {
+  height: 100%;
+  width: 100%;
+}
+
+#__next {
+  width: 100%;
+}
+
+/* Smooth scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(71, 85, 105, 0.1);
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #c77dff, #06d6d6);
+  border-radius: 10px;
+  transition: background 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #a239a3, #00d9d9);
+}
+
+/* Selection styling */
+::selection {
+  background: rgba(147, 51, 234, 0.4);
+  color: #e2e8f0;
+}
+
+::-moz-selection {
+  background: rgba(147, 51, 234, 0.4);
+  color: #e2e8f0;
+}
+
+/* Base element styles */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+h1 {
+  font-size: 3rem;
+  line-height: 1.2;
+}
+
+h2 {
+  font-size: 2.25rem;
+  line-height: 1.2;
+}
+
+h3 {
+  font-size: 1.875rem;
+}
+
+p {
+  line-height: 1.625;
+}
+
+a {
+  transition: all 0.3s ease;
+}
+
+/* Gradient text utility */
+.gradient-text {
+  background: linear-gradient(to right, #06d6d6, #c77dff, #3b82f6);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradient-shift 3s ease infinite;
+  background-size: 200% 200%;
+}
+
+/* Premium card base */
+.card-base {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  padding: 1.5rem;
+  border-radius: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.card-base:hover {
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Section padding */
+.section-padding {
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+}
+
+@media (min-width: 768px) {
+  .section-padding {
+    padding-top: 6rem;
+    padding-bottom: 6rem;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@media (min-width: 1024px) {
+  .section-padding {
+    padding-top: 8rem;
+    padding-bottom: 8rem;
+  }
+}
+
+/* Container with max width */
+.container-custom {
+  width: 100%;
+  max-width: 80rem;
+  margin: 0 auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+@media (min-width: 768px) {
+  .container-custom {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
+/* Glow effects */
+.glow-sm {
+  box-shadow: 0 0 10px rgba(147, 51, 234, 0.2);
+  transition: box-shadow 0.5s ease;
+}
+
+.glow-sm:hover {
+  box-shadow: 0 0 20px rgba(147, 51, 234, 0.3);
+}
+
+.glow-md {
+  box-shadow: 0 0 20px rgba(147, 51, 234, 0.3);
+  transition: box-shadow 0.5s ease;
+}
+
+.glow-md:hover {
+  box-shadow: 0 0 40px rgba(147, 51, 234, 0.4);
+}
+
+.glow-lg {
+  box-shadow: 0 0 40px rgba(147, 51, 234, 0.4);
+  transition: box-shadow 0.5s ease;
+}
+
+/* Backdrop blur glass morphism */
+.glass-morphism {
+  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Loading skeleton animation */
+.skeleton {
+  background: linear-gradient(to right, #1e293b, #0f172a, #1e293b);
+  background-size: 200% 100%;
+  animation: loading 2s infinite;
+}
+
+@keyframes loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+@keyframes gradient-shift {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+/* Custom focus styles for accessibility */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px #03071e, 0 0 0 4px #06d6d6;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  h1 {
+    font-size: 2rem;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+  }
+
+  h3 {
+    font-size: 1.25rem;
+  }
+}
+
+/* Print styles */
+@media print {
+  body {
+    background: white;
+    color: black;
+  }
+
+  .no-print {
+    display: none;
+  }
+}
+
+/* Scrollbar custom styling for Firefox */
+* {
+  scrollbar-color: #c77dff #0f3460;
+  scrollbar-width: thin;
+}
+
+
+/* Base element styles */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+h1 {
+  font-size: 3rem;
+  line-height: 1.2;
+}
+
+h2 {
+  font-size: 2.25rem;
+  line-height: 1.2;
+}
+
+h3 {
+  font-size: 1.875rem;
 }
