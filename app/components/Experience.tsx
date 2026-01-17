@@ -1,20 +1,58 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, useScroll, AnimatePresence } from 'framer-motion';
 
+interface Skill {
+  name: string;
+  proficiency: number;
+  color: string;
+  category: string;
+  energySpeed: number;
+  energySize: number;
+  learned: string;
+  usedIn: string;
+  story: string;
+  icon: string;
+}
+
+interface RootSkill {
+  name: string;
+  proficiency: number;
+  learned: string;
+  story: string;
+  icon: string;
+}
+
+interface TooltipPosition {
+  x: number;
+  y: number;
+  nodeX: number;
+  nodeY: number;
+  mouseX?: number;
+  mouseY?: number;
+}
+
+interface ClickTooltip {
+  skill: Skill | RootSkill;
+  x: number;
+  y: number;
+  nodeX: number;
+  nodeY: number;
+}
+
 const SkillsTree = () => {
-  const [hoveredSkill, setHoveredSkill] = useState(null);
-  const [selectedSkill, setSelectedSkill] = useState(null);
-  const [tooltipPos, setTooltipPos] = useState({ x: 0, y: 0, nodeX: 0, nodeY: 0 });
-  const [clickTooltip, setClickTooltip] = useState(null);
+  const [hoveredSkill, setHoveredSkill] = useState<Skill | RootSkill | null>(null);
+  const [selectedSkill, setSelectedSkill] = useState<Skill | RootSkill | null>(null);
+  const [tooltipPos, setTooltipPos] = useState<TooltipPosition>({ x: 0, y: 0, nodeX: 0, nodeY: 0 });
+  const [clickTooltip, setClickTooltip] = useState<ClickTooltip | null>(null);
   const [tooltipVisible, setTooltipVisible] = useState(false);
-  const containerRef = useRef(null);
-  const svgRef = useRef(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const svgRef = useRef<SVGSVGElement>(null);
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start end", "end start"]
   });
 
-  const handleMouseMove = (e) => {
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!hoveredSkill || !svgRef.current) return;
     
     const svgRect = svgRef.current.getBoundingClientRect();
@@ -30,7 +68,7 @@ const SkillsTree = () => {
     }));
   };
 
-  const handleSkillMouseEnter = (skill, e) => {
+  const handleSkillMouseEnter = (skill: Skill | RootSkill, e: React.MouseEvent<SVGCircleElement>) => {
     if (!svgRef.current) return;
     
     const svgRect = svgRef.current.getBoundingClientRect();
@@ -56,7 +94,7 @@ const SkillsTree = () => {
     }, 150);
   };
 
-  const handleSkillClick = (skill, e) => {
+  const handleSkillClick = (skill: Skill | RootSkill, e: React.MouseEvent<SVGCircleElement>) => {
     if (!svgRef.current) return;
     
     const svgRect = svgRef.current.getBoundingClientRect();
@@ -77,7 +115,7 @@ const SkillsTree = () => {
     }, 2000);
   };
 
-  const skills = [
+  const skills: Skill[] = [
     { 
       name: 'React', 
       proficiency: 92, 
@@ -260,7 +298,7 @@ const SkillsTree = () => {
     },
   ];
 
-  const roots = [
+  const roots: RootSkill[] = [
     { name: 'HTML', proficiency: 95, learned: '2018', story: 'Foundation of all web projects', icon: '📝' },
     { name: 'CSS', proficiency: 92, learned: '2018', story: 'Mastered layouts, animations, responsive design', icon: '🎨' },
     { name: 'JavaScript', proficiency: 90, learned: '2019', story: 'Core programming language, ES6+ expert', icon: '⚡' },
@@ -268,27 +306,27 @@ const SkillsTree = () => {
     { name: 'Algorithms', proficiency: 83, learned: '2019', story: 'Problem-solving foundation', icon: '🔍' }
   ];
 
-  const getGlowIntensity = (skill) => {
+  const getGlowIntensity = (skill: Skill | RootSkill) => {
     if (selectedSkill?.name === skill.name) return 'url(#ultraGlow)';
     if (hoveredSkill?.name === skill.name) return 'url(#strongGlow)';
     return 'url(#glow)';
   };
 
-  const getBranchOpacity = (skill) => {
+  const getBranchOpacity = (skill: Skill | RootSkill) => {
     if (selectedSkill) {
       return selectedSkill.name === skill.name ? 1 : 0.3;
     }
     return hoveredSkill?.name === skill.name ? 1 : 0.8;
   };
 
-  const getNodeScale = (skill) => {
+  const getNodeScale = (skill: Skill | RootSkill) => {
     if (selectedSkill?.name === skill.name) return 1.4;
     if (hoveredSkill?.name === skill.name) return 1.2;
     return 1;
   };
 
   return (
-    <div ref={containerRef} className="min-h-screen relative  overflow-hidden" 
+    <div ref={containerRef} className="min-h-screen relative overflow-hidden" 
          style={{ background: 'linear-gradient(to bottom, #0f172a 0%, #1e293b 50%, #334155 100%)' }}
          onMouseMove={handleMouseMove}
     >
@@ -853,7 +891,7 @@ const SkillsTree = () => {
                               transition={{ duration: 0.5 }}
                               className="h-full rounded-full"
                               style={{ 
-                                background: `linear-gradient(90deg, ${hoveredSkill.color || '#60a5fa'} 0%, #93c5fd 100%)`
+                                background: `linear-gradient(90deg, ${'color' in hoveredSkill ? hoveredSkill.color : '#60a5fa'} 0%, #93c5fd 100%)`
                               }}
                             />
                           </div>
@@ -863,7 +901,7 @@ const SkillsTree = () => {
                         </div>
                       </div>
                       
-                      {hoveredSkill.category && (
+                      {'category' in hoveredSkill && hoveredSkill.category && (
                         <div className="flex items-center justify-between">
                           <span className="text-xs text-cyan-400/70">Category</span>
                           <span className="text-xs font-semibold text-cyan-300 px-1.5 py-0.5 bg-cyan-500/10 rounded">
@@ -984,7 +1022,7 @@ const SkillsTree = () => {
                       {selectedSkill.name}
                     </motion.h2>
                   </div>
-                  {selectedSkill.category && (
+                  {'category' in selectedSkill && selectedSkill.category && (
                     <motion.span 
                       className="inline-block px-4 py-1 rounded-full text-xs font-semibold uppercase tracking-wider bg-cyan-500/20 text-cyan-300 border border-cyan-500/30"
                       initial={{ opacity: 0, x: -20 }}
@@ -1033,7 +1071,7 @@ const SkillsTree = () => {
                     </div>
                   )}
 
-                  {selectedSkill.usedIn && (
+                  {'usedIn' in selectedSkill && selectedSkill.usedIn && (
                     <div>
                       <h3 className="text-cyan-400 text-sm font-semibold uppercase tracking-wider mb-2">Applied In</h3>
                       <p className="text-slate-300 text-lg">{selectedSkill.usedIn}</p>
