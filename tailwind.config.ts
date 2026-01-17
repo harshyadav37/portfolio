@@ -147,23 +147,32 @@ const config: Config = {
     },
   },
   plugins: [
-    require("tailwindcss/plugin")(function ({ addUtilities }) {
+    require("tailwindcss/plugin")(function ({ addUtilities }: { addUtilities: (utilities: Record<string, any>) => void }) {
       addUtilities({
         ".glass": {
-          "@apply bg-white/10 backdrop-blur-md border border-white/20 rounded-xl": {},
+          background: "rgba(255, 255, 255, 0.1)",
+          backdropFilter: "blur(10px)",
+          border: "1px solid rgba(255, 255, 255, 0.2)",
+          borderRadius: "0.75rem",
         },
         ".glass-light": {
-          "@apply bg-white/5 backdrop-blur-sm border border-white/10": {},
+          background: "rgba(255, 255, 255, 0.05)",
+          backdropFilter: "blur(4px)",
+          border: "1px solid rgba(255, 255, 255, 0.1)",
         },
         ".glass-dark": {
-          "@apply bg-black/30 backdrop-blur-xl border border-white/10": {},
+          background: "rgba(0, 0, 0, 0.3)",
+          backdropFilter: "blur(20px)",
+          border: "1px solid rgba(255, 255, 255, 0.1)",
         },
         ".gradient-text": {
-          "@apply bg-gradient-to-r from-cyan-400 via-purple-400 to-blue-500 bg-clip-text text-transparent":
-            {},
+          backgroundImage: "linear-gradient(to right, #06d6d6, #c77dff, #3b82f6)",
+          WebkitBackgroundClip: "text",
+          backgroundClip: "text",
+          color: "transparent",
         },
         ".text-glow": {
-          "text-shadow": "0 0 20px rgba(147, 51, 234, 0.5)",
+          textShadow: "0 0 20px rgba(147, 51, 234, 0.5)",
         },
       });
     }),

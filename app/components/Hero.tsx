@@ -3,7 +3,6 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
-import { Button } from "./ui/Button";
 import TiltedCard from "./ui/TiltedCard";
 import RotatingText from "./ui/RotatingText";
 
@@ -23,7 +22,7 @@ export const Hero: React.FC = () => {
           className="flex flex-col gap-6"
         >
           <span className="text-cyan-400 text-sm tracking-widest uppercase">
-            Hello, I’m
+            Hello, I'm
           </span>
 
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-white leading-tight">
@@ -52,8 +51,11 @@ export const Hero: React.FC = () => {
               exit={{ y: "-120%" }}
               staggerDuration={0.03}
               splitLevelClassName="overflow-hidden"
+              splitBy="characters"
               transition={{ type: "spring", damping: 30, stiffness: 400 }}
               rotationInterval={2200}
+              animatePresenceMode="wait"
+              animatePresenceInitial={false}
             />
           </h2>
 
@@ -64,13 +66,32 @@ export const Hero: React.FC = () => {
 
           {/* CTA BUTTONS */}
           <div className="flex gap-4 pt-4">
-            <Button variant="primary" size="lg" className="gap-2">
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="
+                px-8 py-4 text-lg
+                bg-gradient-to-r from-purple-600 via-blue-500 to-cyan-400
+                hover:shadow-[0_0_30px_rgba(96,165,250,0.6)]
+                text-white font-bold font-medium rounded-lg
+                transition-all duration-300 flex items-center gap-2 justify-center
+              "
+            >
               View Projects <ArrowRight size={18} />
-            </Button>
+            </motion.button>
 
-            <Button variant="secondary" size="lg">
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="
+                px-8 py-4 text-lg
+                bg-slate-700 hover:bg-slate-600
+                text-white font-medium rounded-lg
+                transition-all duration-300 flex items-center gap-2 justify-center
+              "
+            >
               Contact Me
-            </Button>
+            </motion.button>
           </div>
         </motion.div>
 

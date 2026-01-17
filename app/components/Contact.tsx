@@ -2,7 +2,6 @@
 
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Button } from './ui/Button';
 import { Card } from './ui/Card';
 import { Mail, MessageSquare, Phone, MapPin, Github, Linkedin, Twitter } from 'lucide-react';
 
@@ -282,17 +281,30 @@ export const Contact: React.FC = () => {
                 )}
 
                 {/* Submit Button */}
-                <Button
+                <motion.button
                   type="submit"
-                  variant="gradient"
-                  size="lg"
-                  isLoading={isSubmitting}
                   disabled={isSubmitting}
-                  className="w-full"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className={`
+                    w-full px-8 py-4 text-lg font-medium rounded-lg 
+                    transition-all duration-300 flex items-center gap-2 justify-center
+                    bg-gradient-to-r from-purple-600 via-blue-500 to-cyan-400
+                    hover:shadow-[0_0_30px_rgba(96,165,250,0.6)]
+                    text-white font-bold
+                    disabled:opacity-50 disabled:cursor-not-allowed
+                  `}
                 >
-                  <MessageSquare size={20} />
-                  Send Message
-                </Button>
+                  {isSubmitting && (
+                    <motion.div
+                      animate={{ rotate: 360 }}
+                      transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+                      className="w-5 h-5 border-2 border-current border-t-transparent rounded-full"
+                    />
+                  )}
+                  {!isSubmitting && <MessageSquare size={20} />}
+                  {isSubmitting ? 'Sending...' : 'Send Message'}
+                </motion.button>
               </form>
             </Card>
           </motion.div>
