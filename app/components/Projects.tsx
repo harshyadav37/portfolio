@@ -3,7 +3,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Card } from './ui/Card';
-import { Badge, BadgeGroup } from './ui/Badge';
+// import { Badge, BadgeGroup } from './ui/Badge';
 import { Github, ExternalLink, ArrowRight } from 'lucide-react';
 
 const projects = [
@@ -151,7 +151,7 @@ export const Projects: React.FC = () => {
 
                   {/* Technologies */}
                   <div className="mb-6">
-                    <BadgeGroup items={project.technologies} variant="primary" />
+                    {/* <BadgeGroup items={project.technologies} variant="primary" /> */}
                   </div>
 
                   {/* Links */}

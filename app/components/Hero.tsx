@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import TiltedCard from "./ui/TiltedCard";
 import RotatingText from "./ui/RotatingText";
+// import { VideoText } from "@/registry/magicui/video-text"
 
 export const Hero: React.FC = () => {
   return (
@@ -24,6 +25,9 @@ export const Hero: React.FC = () => {
           <span className="text-cyan-400 text-sm tracking-widest uppercase">
             Hello, I'm
           </span>
+          {/* <div className="relative h-[500px] w-full overflow-hidden">
+  <VideoText src="https://cdn.magicui.design/ocean-small.webm">OCEAN</VideoText>
+</div> */}
 
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-white leading-tight">
             Harsh <span className="text-cyan-400">Yadav</span>
