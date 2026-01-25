@@ -3,7 +3,7 @@
 import React from "react";
 import { useScroll, useTransform } from "framer-motion";
 import { GoogleGeminiEffect } from "../../../components/ui/google-gemini-effect";
-import ProfileCard from "../../../components/ProfileCard";
+
 
 const Aboutpage = () => {
   const ref = React.useRef<HTMLDivElement | null>(null);
@@ -22,19 +22,21 @@ const Aboutpage = () => {
   return (
     <div
       ref={ref}
-      className="h-[45vh] bg-black w-full rounded-md relative overflow-hidden"
+      className="relative w-full bg-black overflow-hidden h-[180px] sm:h-[220px] md:h-[280px] lg:h-[320px]"
     >
-      <GoogleGeminiEffect
-        pathLengths={[
-          pathLengthFirst,
-          pathLengthSecond,
-          pathLengthThird,
-          pathLengthFourth,
-          pathLengthFifth,
-        ]}
-        title=""
-        description=""
-      />
+      <div className="relative w-full h-full px-4">
+        <GoogleGeminiEffect
+          pathLengths={[
+            pathLengthFirst,
+            pathLengthSecond,
+            pathLengthThird,
+            pathLengthFourth,
+            pathLengthFifth,
+          ]}
+          title=""
+          description=""
+        />
+      </div>
     </div>
   );
 };

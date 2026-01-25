@@ -1,28 +1,26 @@
 "use client";
 
 import React from "react";
-// import CompareText from "./CompareText"
-import ElectricBorder from "../../../components/ElectricBorder"
-import MagicBento from "../../../components/MagicBento"
+import ElectricBorder from "../../../components/ElectricBorder";
+import MagicBento from "../../../components/MagicBento";
 
 const TracingBeamDemo = () => {
   return (
-    <div className="min-h-screen bg-white dark:bg-black py-20">
-      <div className="max-w-2xl mx-auto antialiased relative">
+    <div className="min-h-screen bg-white dark:bg-black py-12 sm:py-16 md:py-20 px-4 xs:px-6 sm:px-8 md:px-10 lg:px-12">
+      <div className="max-w-2xl mx-auto antialiased relative w-full">
         {/* About Me Section */}
-        <div className="mb-16">
-          <h2 className="bg-black text-white rounded-full text-sm w-fit px-4 py-1 mb-6">
+        <div className="mb-12 sm:mb-14 md:mb-16">
+          <h2 className="bg-black text-white rounded-full text-xs sm:text-sm w-fit px-3 sm:px-4 py-1 mb-4 sm:mb-5 md:mb-6">
             About Me
           </h2>
 
-          <p className="text-2xl md:text-3xl font-semibold mb-6 text-black dark:text-white">
+          <p className="text-xl xs:text-2xl sm:text-3xl md:text-4xl font-semibold mb-4 sm:mb-5 md:mb-6 text-black dark:text-white">
             Hi, I'm Harsh 👋
           </p>
 
-          <div className="text-base md:text-lg text-gray-700 dark:text-gray-300 leading-relaxed space-y-4">
-          
-            <div className="space-y-4">
-              <p className="text-lg font-medium">
+          <div className="text-sm sm:text-base md:text-lg text-gray-700 dark:text-gray-300 leading-relaxed sm:leading-relaxed space-y-3 sm:space-y-4">
+            <div className="space-y-3 sm:space-y-4">
+              <p className="text-base sm:text-lg md:text-xl font-medium">
                 I'm a passionate MERN Stack Developer who loves building modern,
                 scalable, and user-friendly web applications.
               </p>
@@ -32,36 +30,22 @@ const TracingBeamDemo = () => {
                 experiences, and learning new technologies.
               </p>
             </div>
-            {/* <div className="w-full h-80 bg-[red] flex gap-6 flex-wrap">
-   <img
-              src="https://images.unsplash.com/photo-1519681393784-d120267933ba"
-              alt="about image"
-              className="rounded-lg  object-cover w-[48%] h-64 md:h-80"
-            />
-
-           
-            </div> */}
-           
           </div>
         </div>
 
         {/* Skills Section */}
-        <div className="mb-16" style={{ marginTop: "4rem" }}>
-          <h2 className="bg-black text-white rounded-full text-sm w-fit px-4 py-1 mb-6">
+        <div className="mb-12 sm:mb-14 md:mb-16 mt-8 sm:mt-10 md:mt-12 lg:mt-16">
+          <h2 className="bg-black text-white rounded-full text-xs sm:text-sm w-fit px-3 sm:px-4 py-1 mb-4 sm:mb-5 md:mb-6">
             Skills
           </h2>
 
-          <p className="text-2xl md:text-3xl font-semibold mb-6 text-black dark:text-white">
+          <p className="text-xl xs:text-2xl sm:text-3xl md:text-4xl font-semibold mb-4 sm:mb-5 md:mb-6 text-black dark:text-white">
             What I Do
           </p>
 
-          <div className="text-base md:text-lg text-gray-700 dark:text-gray-300 leading-relaxed space-y-4">
-           
-            
-    
-            
-            <div className="space-y-4">
-              <p className="text-lg font-medium">
+          <div className="text-sm sm:text-base md:text-lg text-gray-700 dark:text-gray-300 leading-relaxed sm:leading-relaxed space-y-3 sm:space-y-4">
+            <div className="space-y-3 sm:space-y-4">
+              <p className="text-base sm:text-lg md:text-xl font-medium">
                 I specialize in full-stack web development using modern JavaScript
                 frameworks and tools.
               </p>
@@ -74,43 +58,41 @@ const TracingBeamDemo = () => {
                 create secure and scalable systems.
               </p>
             </div>
-             <div className="w-full h-166  flex gap-6 flex-wrap">
-
             
-            
-            <MagicBento 
-  // textAutoHide={true}
-  enableStars
-  enableSpotlight
-  enableBorderGlow={true}
-  enableTilt={false}
-  enableMagnetism={false}
-  clickEffect
-  spotlightRadius={400}
-  particleCount={12}
-  glowColor="132, 0, 255"
-  disableAnimations={false}
-/>
+            {/* MagicBento container - same width as text */}
+            <div className="w-full mt-6 sm:mt-8 md:mt-10">
+              <div className="w-full">
+                <MagicBento 
+                  enableStars
+                  enableSpotlight
+                  enableBorderGlow={true}
+                  enableTilt={false}
+                  enableMagnetism={false}
+                  clickEffect
+                  spotlightRadius={400}
+                  particleCount={12}
+                  glowColor="132, 0, 255"
+                  disableAnimations={false}
+                  // className="w-full"
+                />
+              </div>
             </div>
           </div>
         </div>
 
-      
-
         {/* Personal Section */}
-        <div className="mb-16" style={{ marginTop: "4rem" }}>
-          <h2 className="bg-black text-white rounded-full text-sm w-fit px-4 py-1 mb-6">
+        <div className="mb-12 sm:mb-14 md:mb-16 mt-8 sm:mt-10 md:mt-12 lg:mt-16">
+          <h2 className="bg-black text-white rounded-full text-xs sm:text-sm w-fit px-3 sm:px-4 py-1 mb-4 sm:mb-5 md:mb-6">
             Personal
           </h2>
 
-          <p className="text-2xl md:text-3xl font-semibold mb-6 text-black dark:text-white">
+          <p className="text-xl xs:text-2xl sm:text-3xl md:text-4xl font-semibold mb-4 sm:mb-5 md:mb-6 text-black dark:text-white">
             Beyond Coding
           </p>
 
-          <div className="text-base md:text-lg text-gray-700 dark:text-gray-300 leading-relaxed space-y-4">
-          
-            <div className="space-y-4">
-              <p className="text-lg font-medium">
+          <div className="text-sm sm:text-base md:text-lg text-gray-700 dark:text-gray-300 leading-relaxed sm:leading-relaxed space-y-3 sm:space-y-4">
+            <div className="space-y-3 sm:space-y-4">
+              <p className="text-base sm:text-lg md:text-xl font-medium">
                 When I'm not coding, I enjoy exploring new tech trends and improving
                 my problem-solving skills.
               </p>
@@ -123,11 +105,14 @@ const TracingBeamDemo = () => {
                 growth-oriented — let's connect!
               </p>
             </div>
+            
+            <div className="w-full mt-4 sm:mt-6 md:mt-8">
               <img
-              src="/assets/laptop.png"
-              alt="personal image"
-              className="rounded-lg mb-8 object-cover w-full h-64 md:h-80"
-            />
+                src="/assets/laptop.png"
+                alt="personal image"
+                className="rounded-lg object-cover w-full h-48 xs:h-56 sm:h-64 md:h-72 lg:h-80"
+              />
+            </div>
           </div>
         </div>
       </div>
