@@ -47,7 +47,7 @@ export const GoogleGeminiEffect = ({
             userSelect: 'none'
           }}
         >
-          ui.aceternity.com
+          harsh.portfolio.in
         </text>
         
         {/* Animated paths */}

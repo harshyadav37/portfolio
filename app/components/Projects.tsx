@@ -3,30 +3,30 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Card } from './ui/Card';
-// import { Badge, BadgeGroup } from './ui/Badge';
+
 import { Github, ExternalLink, ArrowRight } from 'lucide-react';
 
 const projects = [
   {
-    title: 'E-Commerce Platform',
+    title: 'Fitzone',
     description: 'A full-featured e-commerce platform with real-time inventory management, payment processing, and advanced analytics.',
-    image: 'https://images.unsplash.com/photo-1557821552-17105176677c?w=500&h=300&fit=crop',
+    image: '/assets/gym.png',
     technologies: ['Next.js', 'React', 'TypeScript', 'PostgreSQL', 'Stripe'],
     link: '#',
     github: 'https://github.com',
   },
   {
-    title: 'SaaS Dashboard',
+    title: 'Croose',
     description: 'Real-time analytics dashboard for SaaS businesses with interactive charts, user management, and API integrations.',
-    image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=500&h=300&fit=crop',
+    image: '/assets/Croose.png',
     technologies: ['React', 'Node.js', 'MongoDB', 'Chart.js', 'WebSockets'],
     link: '#',
     github: 'https://github.com',
   },
   {
-    title: 'AI Content Generator',
+    title: 'Ordiio',
     description: 'AI-powered tool that generates high-quality content using GPT-4. Features user authentication, subscription management, and credits system.',
-    image: 'https://images.unsplash.com/photo-1677442d019cecf8f69a4a1e7ea5e3c5?w=500&h=300&fit=crop',
+    image: '/assets/Ordiio.png',
     technologies: ['Next.js', 'OpenAI API', 'Tailwind CSS', 'Prisma', 'Firebase'],
     link: '#',
     github: 'https://github.com',

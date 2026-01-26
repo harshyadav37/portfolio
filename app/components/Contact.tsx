@@ -3,25 +3,25 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Card } from './ui/Card';
-import { Mail, MessageSquare, Phone, MapPin, Github, Linkedin, Twitter } from 'lucide-react';
+import { Mail, MessageSquare, Phone, MapPin, Github, Linkedin, Instagram } from 'lucide-react';
 
 const contactMethods = [
   {
     icon: Mail,
     label: 'Email',
-    value: 'hello@example.com',
+    value: 'hy050712@gmail.com',
     href: 'mailto:hello@example.com',
   },
   {
     icon: Phone,
     label: 'Phone',
-    value: '+1 (555) 123-4567',
+    value: '+91 9302446449',
     href: 'tel:+15551234567',
   },
   {
     icon: MapPin,
     label: 'Location',
-    value: 'San Francisco, CA',
+    value: 'Indore',
     href: '#',
   },
 ];
@@ -29,18 +29,18 @@ const contactMethods = [
 const socialLinks = [
   {
     icon: Github,
-    href: 'https://github.com',
+    href: 'https://github.com/harshyadav37',
     label: 'GitHub',
   },
   {
     icon: Linkedin,
-    href: 'https://linkedin.com',
+    href: 'https://www.linkedin.com/in/harsh-yadav-a8a90826b/',
     label: 'LinkedIn',
   },
   {
-    icon: Twitter,
-    href: 'https://twitter.com',
-    label: 'Twitter',
+    icon: Instagram,
+    href: 'https://www.instagram.com/harshyadav89_/',
+    label: 'Instagram',
   },
 ];
 

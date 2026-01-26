@@ -45,12 +45,24 @@ const SkillsTree = () => {
   const [tooltipPos, setTooltipPos] = useState<TooltipPosition>({ x: 0, y: 0, nodeX: 0, nodeY: 0 });
   const [clickTooltip, setClickTooltip] = useState<ClickTooltip | null>(null);
   const [tooltipVisible, setTooltipVisible] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const svgRef = useRef<SVGSVGElement>(null);
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start end", "end start"]
   });
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!hoveredSkill || !svgRef.current) return;
@@ -325,16 +337,52 @@ const SkillsTree = () => {
     return 1;
   };
 
+  const getTooltipPosition = (nodeX: number, nodeY: number, svgRect: DOMRect) => {
+    const tooltipWidth = isMobile ? 180 : 200;
+    const tooltipHeight = isMobile ? 85 : 100;
+    const margin = 10;
+    
+    // Calculate position to keep tooltip within SVG bounds
+    let x = nodeX + 20; // Default to right
+    let y = nodeY - tooltipHeight / 2; // Center vertically
+    let side: 'top' | 'right' | 'left' | 'bottom' = 'right';
+    
+    // Check if tooltip would go beyond right edge
+    if (x + tooltipWidth > svgRect.width - margin) {
+      x = nodeX - tooltipWidth - 20; // Position to the left
+      side = 'left';
+    }
+    
+    // Check if tooltip would go beyond left edge
+    if (x < margin) {
+      x = margin;
+    }
+    
+    // Check if tooltip would go beyond top edge
+    if (y < margin) {
+      y = margin;
+      side = 'bottom';
+    }
+    
+    // Check if tooltip would go beyond bottom edge
+    if (y + tooltipHeight > svgRect.height - margin) {
+      y = svgRect.height - tooltipHeight - margin;
+      side = 'top';
+    }
+    
+    return { x, y, side };
+  };
+
   return (
     <div ref={containerRef} className="min-h-screen relative overflow-hidden" 
          style={{ background: 'linear-gradient(to bottom, #0f172a 0%, #1e293b 50%, #334155 100%)' }}
          onMouseMove={handleMouseMove}
     >
-      <div className="max-w-7xl mx-auto px-4 py-2 relative z-10">
+      <div className="max-w-6xl mx-auto px-2 md:px-4 py-0 md:py-2 relative z-10">
         <motion.h1 
-          initial={{ opacity: 0, y: -30 }}
+          initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-5xl md:text-6xl font-bold text-center mb-2 text-white"
+          className="text-2xl md:text-5xl font-bold text-center mb-1 md:mb-2 text-white pt-2 md:pt-4"
           style={{
             textShadow: '0 0 40px rgba(96, 165, 250, 0.8), 0 0 80px rgba(96, 165, 250, 0.4)'
           }}
@@ -345,18 +393,18 @@ const SkillsTree = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.3 }}
-          className="text-center text-cyan-300/70 mb-4 text-xs tracking-widest uppercase"
+          className="text-center text-cyan-300/70 mb-2 md:mb-3 text-[10px] md:text-xs tracking-widest uppercase px-2"
         >
-          Hover to Explore • Click for Detailed Stories
+          {isMobile ? 'Tap nodes for info' : 'Hover nodes for info • Click for detailed stories'}
         </motion.p>
 
-        <div className="relative w-full flex justify-center">
+        <div className="relative w-full flex justify-center mt-0">
           <svg
             ref={svgRef}
-            width="800"
-            height="900"
-            viewBox="0 0 800 900"
-            className="w-full max-w-3xl"
+            width="700"
+            height="800"
+            viewBox="0 0 700 800"
+            className="w-full max-w-2xl h-auto"
             onMouseLeave={() => {
               setTooltipVisible(false);
               setTimeout(() => setHoveredSkill(null), 150);
@@ -421,23 +469,23 @@ const SkillsTree = () => {
             {/* Glowing base */}
             <motion.rect
               x="0"
-              y="820"
-              width="800"
+              y="720"
+              width="700"
               height="80"
               fill="url(#trunkGlow)"
               opacity="0.3"
             />
 
-            {/* Grid floor */}
-            {Array.from({ length: 20 }).map((_, i) => (
+            {/* Grid floor - Reduced on mobile */}
+            {Array.from({ length: isMobile ? 10 : 16 }).map((_, i) => (
               <motion.line
                 key={`floor${i}`}
-                x1={i * 40}
-                y1="820"
-                x2={400 + (i - 10) * 60}
-                y2="900"
+                x1={i * (isMobile ? 70 : 44)}
+                y1="720"
+                x2={350 + (i - (isMobile ? 5 : 8)) * (isMobile ? 87 : 55)}
+                y2="800"
                 stroke="#60a5fa"
-                strokeWidth="2"
+                strokeWidth={isMobile ? "1.5" : "2"}
                 initial={{ pathLength: 0, opacity: 0.15 }}
                 animate={{ 
                   pathLength: 1,
@@ -449,8 +497,8 @@ const SkillsTree = () => {
 
             {/* Roots */}
             {roots.map((root, i) => {
-              const spacing = 120;
-              const startX = 400 - (roots.length - 1) * spacing / 2 + i * spacing;
+              const spacing = isMobile ? 75 : 100;
+              const startX = 350 - (roots.length - 1) * spacing / 2 + i * spacing;
               
               return (
                 <motion.g
@@ -463,11 +511,11 @@ const SkillsTree = () => {
                 >
                   <motion.line
                     x1={startX}
-                    y1="820"
-                    x2="400"
-                    y2="750"
+                    y1="720"
+                    x2="350"
+                    y2="650"
                     stroke="#60a5fa"
-                    strokeWidth="3"
+                    strokeWidth={isMobile ? "2" : "3"}
                     filter="url(#glow)"
                     initial={{ pathLength: 0 }}
                     animate={{ pathLength: 1 }}
@@ -476,11 +524,11 @@ const SkillsTree = () => {
                   
                   <motion.circle
                     cx={startX}
-                    cy="820"
-                    r="8"
+                    cy="720"
+                    r={isMobile ? 5 : 7}
                     fill="none"
                     stroke="#60a5fa"
-                    strokeWidth="2"
+                    strokeWidth={isMobile ? "1.5" : "2"}
                     filter={getGlowIntensity(root)}
                     whileHover={{ scale: 1.5, fill: "#60a5fa" }}
                     onMouseEnter={(e) => handleSkillMouseEnter(root, e)}
@@ -498,8 +546,8 @@ const SkillsTree = () => {
                   />
                   <motion.circle
                     cx={startX}
-                    cy="820"
-                    r="4"
+                    cy="720"
+                    r={isMobile ? 2.5 : 3.5}
                     fill="#ffffff"
                     opacity="0.9"
                   />
@@ -507,10 +555,10 @@ const SkillsTree = () => {
                   {/* Root skill name text */}
                   <motion.text
                     x={startX}
-                    y="850"
+                    y="745"
                     textAnchor="middle"
                     fill="#dbeafe"
-                    fontSize="16"
+                    fontSize={isMobile ? "11" : "14"}
                     fontWeight="500"
                     filter={getGlowIntensity(root)}
                     initial={{ opacity: 0 }}
@@ -531,12 +579,12 @@ const SkillsTree = () => {
               }}
             >
               <motion.line
-                x1="380"
-                y1="750"
-                x2="350"
-                y2="200"
+                x1="330"
+                y1="650"
+                x2="310"
+                y2="180"
                 stroke="url(#trunkGlow)"
-                strokeWidth="8"
+                strokeWidth={isMobile ? "5" : "7"}
                 strokeLinecap="round"
                 filter="url(#strongGlow)"
                 initial={{ pathLength: 0 }}
@@ -545,12 +593,12 @@ const SkillsTree = () => {
               />
               
               <motion.line
-                x1="420"
-                y1="750"
-                x2="450"
-                y2="200"
+                x1="370"
+                y1="650"
+                x2="390"
+                y2="180"
                 stroke="url(#trunkGlow)"
-                strokeWidth="8"
+                strokeWidth={isMobile ? "5" : "7"}
                 strokeLinecap="round"
                 filter="url(#strongGlow)"
                 initial={{ pathLength: 0 }}
@@ -559,12 +607,12 @@ const SkillsTree = () => {
               />
 
               <motion.line
-                x1="400"
-                y1="750"
-                x2="400"
-                y2="150"
+                x1="350"
+                y1="650"
+                x2="350"
+                y2="130"
                 stroke="#dbeafe"
-                strokeWidth="4"
+                strokeWidth={isMobile ? "2.5" : "3.5"}
                 strokeLinecap="round"
                 filter="url(#glow)"
                 initial={{ pathLength: 0 }}
@@ -577,13 +625,13 @@ const SkillsTree = () => {
             {skills.map((skill, skillIdx) => {
               const angle = (skillIdx / skills.length) * 360 - 90;
               const angleRad = (angle * Math.PI) / 180;
-              const baseRadius = 180;
-              const endRadius = 320;
+              const baseRadius = isMobile ? 120 : 150;
+              const endRadius = isMobile ? 220 : 280;
               
-              const startX = 400 + Math.cos(angleRad) * baseRadius;
-              const startY = 400 + Math.sin(angleRad) * baseRadius;
-              const endX = 400 + Math.cos(angleRad) * endRadius;
-              const endY = 400 + Math.sin(angleRad) * endRadius;
+              const startX = 350 + Math.cos(angleRad) * baseRadius;
+              const startY = 350 + Math.sin(angleRad) * baseRadius;
+              const endX = 350 + Math.cos(angleRad) * endRadius;
+              const endY = 350 + Math.sin(angleRad) * endRadius;
 
               const particleCount = skill.category === 'creative' ? 4 : 3;
 
@@ -592,7 +640,7 @@ const SkillsTree = () => {
                   key={`${skill.name}-particle-${i}`}
                   cx={startX}
                   cy={startY}
-                  r={skill.energySize}
+                  r={skill.energySize * (isMobile ? 0.7 : 0.9)}
                   fill={skill.color}
                   filter={getGlowIntensity(skill)}
                   opacity={getBranchOpacity(skill)}
@@ -620,13 +668,13 @@ const SkillsTree = () => {
             {skills.map((skill, idx) => {
               const angle = (idx / skills.length) * 360 - 90;
               const angleRad = (angle * Math.PI) / 180;
-              const baseRadius = 180;
-              const endRadius = 320;
+              const baseRadius = isMobile ? 120 : 150;
+              const endRadius = isMobile ? 220 : 280;
               
-              const startX = 400 + Math.cos(angleRad) * baseRadius;
-              const startY = 400 + Math.sin(angleRad) * baseRadius;
-              const endX = 400 + Math.cos(angleRad) * endRadius;
-              const endY = 400 + Math.sin(angleRad) * endRadius;
+              const startX = 350 + Math.cos(angleRad) * baseRadius;
+              const startY = 350 + Math.sin(angleRad) * baseRadius;
+              const endX = 350 + Math.cos(angleRad) * endRadius;
+              const endY = 350 + Math.sin(angleRad) * endRadius;
               
               const midX = (startX + endX) / 2;
               const midY = idx % 2 === 0 ? Math.min(startY, endY) : Math.max(startY, endY);
@@ -644,7 +692,7 @@ const SkillsTree = () => {
                     d={`M ${startX} ${startY} L ${midX} ${startY} L ${midX} ${midY} L ${endX} ${midY} L ${endX} ${endY}`}
                     fill="none"
                     stroke={`url(#energyGrad-${skill.name})`}
-                    strokeWidth="2.5"
+                    strokeWidth={isMobile ? "1.8" : "2.2"}
                     filter={getGlowIntensity(skill)}
                     initial={{ pathLength: 0 }}
                     animate={{ pathLength: 1 }}
@@ -654,7 +702,7 @@ const SkillsTree = () => {
                   <motion.circle
                     cx={midX}
                     cy={startY}
-                    r="3"
+                    r={isMobile ? "1.8" : "2.5"}
                     fill={skill.color}
                     filter={getGlowIntensity(skill)}
                     initial={{ scale: 0 }}
@@ -664,7 +712,7 @@ const SkillsTree = () => {
                   <motion.circle
                     cx={midX}
                     cy={midY}
-                    r="3"
+                    r={isMobile ? "1.8" : "2.5"}
                     fill={skill.color}
                     filter={getGlowIntensity(skill)}
                     initial={{ scale: 0 }}
@@ -674,7 +722,7 @@ const SkillsTree = () => {
                   <motion.circle
                     cx={endX}
                     cy={midY}
-                    r="3"
+                    r={isMobile ? "1.8" : "2.5"}
                     fill={skill.color}
                     filter={getGlowIntensity(skill)}
                     initial={{ scale: 0 }}
@@ -690,7 +738,7 @@ const SkillsTree = () => {
                     <motion.circle
                       cx={endX}
                       cy={endY}
-                      r="18"
+                      r={isMobile ? 12 : 16}
                       fill="url(#nodeGlow)"
                       opacity="0.4"
                       animate={{
@@ -707,10 +755,10 @@ const SkillsTree = () => {
                     <motion.circle
                       cx={endX}
                       cy={endY}
-                      r="12"
+                      r={isMobile ? 8 : 11}
                       fill="none"
                       stroke={skill.color}
-                      strokeWidth="2.5"
+                      strokeWidth={isMobile ? "1.8" : "2.2"}
                       filter={getGlowIntensity(skill)}
                       className="cursor-pointer"
                       whileHover={{ scale: 1.3 }}
@@ -730,7 +778,7 @@ const SkillsTree = () => {
                     <motion.circle
                       cx={endX}
                       cy={endY}
-                      r="5"
+                      r={isMobile ? 3.5 : 4.5}
                       fill="#ffffff"
                       opacity="0.95"
                       animate={{
@@ -745,11 +793,11 @@ const SkillsTree = () => {
                   </motion.g>
 
                   <motion.text
-                    x={endX + (Math.cos(angleRad) * 35)}
-                    y={endY + (Math.sin(angleRad) * 35)}
+                    x={endX + (Math.cos(angleRad) * (isMobile ? 24 : 30))}
+                    y={endY + (Math.sin(angleRad) * (isMobile ? 24 : 30))}
                     textAnchor="middle"
                     fill="#dbeafe"
-                    fontSize="18"
+                    fontSize={isMobile ? "12" : "16"}
                     fontWeight="500"
                     filter={getGlowIntensity(skill)}
                     initial={{ opacity: 0 }}
@@ -763,7 +811,7 @@ const SkillsTree = () => {
               );
             })}
 
-            {/* Central core */}
+            {/* Central core - Smaller */}
             <motion.g
               initial={{ scale: 0, opacity: 0 }}
               animate={{ 
@@ -773,13 +821,13 @@ const SkillsTree = () => {
               transition={{ delay: 1.8, duration: 1 }}
             >
               <motion.rect
-                x="360"
-                y="360"
-                width="80"
-                height="80"
+                x={isMobile ? "320" : "315"}
+                y={isMobile ? "320" : "315"}
+                width={isMobile ? "60" : "70"}
+                height={isMobile ? "60" : "70"}
                 fill="none"
                 stroke="#60a5fa"
-                strokeWidth="3"
+                strokeWidth={isMobile ? "2.2" : "2.8"}
                 filter="url(#strongGlow)"
                 animate={{
                   rotate: [0, 360]
@@ -792,10 +840,10 @@ const SkillsTree = () => {
               />
               
               <motion.rect
-                x="370"
-                y="370"
-                width="60"
-                height="60"
+                x={isMobile ? "325" : "322"}
+                y={isMobile ? "325" : "322"}
+                width={isMobile ? "50" : "56"}
+                height={isMobile ? "50" : "56"}
                 fill="#60a5fa"
                 opacity="0.3"
                 filter="url(#glow)"
@@ -811,9 +859,9 @@ const SkillsTree = () => {
               />
               
               <motion.circle
-                cx="400"
-                cy="400"
-                r="20"
+                cx="350"
+                cy="350"
+                r={isMobile ? 14 : 18}
                 fill="#dbeafe"
                 filter="url(#strongGlow)"
                 animate={{
@@ -829,14 +877,15 @@ const SkillsTree = () => {
               
               {[0, 1, 2, 3].map(i => {
                 const angle = i * 90;
-                const x = 400 + Math.cos((angle - 45) * Math.PI / 180) * 40;
-                const y = 400 + Math.sin((angle - 45) * Math.PI / 180) * 40;
+                const radius = isMobile ? 28 : 35;
+                const x = 350 + Math.cos((angle - 45) * Math.PI / 180) * radius;
+                const y = 350 + Math.sin((angle - 45) * Math.PI / 180) * radius;
                 return (
                   <motion.circle
                     key={i}
                     cx={x}
                     cy={y}
-                    r="4"
+                    r={isMobile ? "2.5" : "3.5"}
                     fill="#60a5fa"
                     filter="url(#glow)"
                     animate={{
@@ -854,88 +903,127 @@ const SkillsTree = () => {
             </motion.g>
 
             {/* SVG-based tooltip (inside SVG for better positioning) */}
-            {hoveredSkill && !selectedSkill && !clickTooltip && tooltipPos.nodeX && tooltipPos.nodeY && (
-              <foreignObject
-                x={tooltipPos.nodeX + 15}
-                y={tooltipPos.nodeY - 70}
-                width="200"
-                height="100"
-                className="pointer-events-none"
-              >
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.9, y: 10 }}
-                  animate={{ opacity: 1, scale: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.9, y: 10 }}
-                  transition={{ duration: 0.15 }}
-                  className="bg-slate-900/95 backdrop-blur-xl rounded-xl border border-cyan-400/50 shadow-2xl overflow-hidden"
-                  style={{ 
-                    boxShadow: '0 0 30px rgba(96, 165, 250, 0.4), 0 10px 30px rgba(0, 0, 0, 0.5)'
-                  }}
-                >
-                  <div className="p-3">
-                    <div className="flex items-center gap-2 mb-2">
-                      <div className="text-lg">{hoveredSkill.icon}</div>
-                      <h3 className="text-sm font-bold text-cyan-300 flex-1 truncate">
-                        {hoveredSkill.name}
-                      </h3>
-                    </div>
-                    
-                    <div className="space-y-1">
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs text-cyan-400/70">Proficiency</span>
-                        <div className="flex items-center gap-1">
-                          <div className="w-12 h-1.5 bg-slate-800 rounded-full overflow-hidden">
-                            <motion.div
-                              initial={{ width: 0 }}
-                              animate={{ width: `${hoveredSkill.proficiency}%` }}
-                              transition={{ duration: 0.5 }}
-                              className="h-full rounded-full"
-                              style={{ 
-                                background: `linear-gradient(90deg, ${'color' in hoveredSkill ? hoveredSkill.color : '#60a5fa'} 0%, #93c5fd 100%)`
-                              }}
-                            />
+            {hoveredSkill && !selectedSkill && !clickTooltip && svgRef.current && tooltipPos.nodeX && tooltipPos.nodeY && (
+              (() => {
+                const svgRect = svgRef.current.getBoundingClientRect();
+                const pos = getTooltipPosition(tooltipPos.nodeX, tooltipPos.nodeY, svgRect);
+                
+                return (
+                  <foreignObject
+                    x={pos.x}
+                    y={pos.y}
+                    width={isMobile ? "170" : "190"}
+                    height={isMobile ? "80" : "95"}
+                    className="pointer-events-none"
+                  >
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.9 }}
+                      transition={{ duration: 0.15 }}
+                      className="bg-slate-900/95 backdrop-blur-xl rounded-lg border border-cyan-400/50 shadow-2xl overflow-hidden"
+                      style={{ 
+                        boxShadow: '0 0 30px rgba(96, 165, 250, 0.4), 0 10px 30px rgba(0, 0, 0, 0.5)'
+                      }}
+                    >
+                      <div className="p-2 md:p-3">
+                        <div className="flex items-center gap-2 mb-1 md:mb-2">
+                          <div className="text-base md:text-lg">{hoveredSkill.icon}</div>
+                          <h3 className="text-xs md:text-sm font-bold text-cyan-300 flex-1 truncate">
+                            {hoveredSkill.name}
+                          </h3>
+                        </div>
+                        
+                        <div className="space-y-1">
+                          <div className="flex items-center justify-between">
+                            <span className="text-[10px] md:text-xs text-cyan-400/70">Proficiency</span>
+                            <div className="flex items-center gap-1">
+                              <div className="w-8 md:w-10 h-1.5 bg-slate-800 rounded-full overflow-hidden">
+                                <motion.div
+                                  initial={{ width: 0 }}
+                                  animate={{ width: `${hoveredSkill.proficiency}%` }}
+                                  transition={{ duration: 0.5 }}
+                                  className="h-full rounded-full"
+                                  style={{ 
+                                    background: `linear-gradient(90deg, ${'color' in hoveredSkill ? hoveredSkill.color : '#60a5fa'} 0%, #93c5fd 100%)`
+                                  }}
+                                />
+                              </div>
+                              <span className="text-[10px] md:text-xs font-bold text-white tabular-nums">
+                                {hoveredSkill.proficiency}%
+                              </span>
+                            </div>
                           </div>
-                          <span className="text-xs font-bold text-white tabular-nums">
-                            {hoveredSkill.proficiency}%
-                          </span>
+                          
+                          {'category' in hoveredSkill && hoveredSkill.category && (
+                            <div className="flex items-center justify-between">
+                              <span className="text-[10px] md:text-xs text-cyan-400/70">Category</span>
+                              <span className="text-[10px] md:text-xs font-semibold text-cyan-300 px-1 py-0.5 bg-cyan-500/10 rounded">
+                                {hoveredSkill.category}
+                              </span>
+                            </div>
+                          )}
+                          
+                          {hoveredSkill.learned && (
+                            <div className="flex items-center justify-between">
+                              <span className="text-[10px] md:text-xs text-cyan-400/70">Learned</span>
+                              <span className="text-[10px] md:text-xs font-medium text-white">{hoveredSkill.learned}</span>
+                            </div>
+                          )}
+                        </div>
+                        
+                        <div className="mt-1 md:mt-2 pt-1 md:pt-2 border-t border-cyan-500/20">
+                          <p className="text-[9px] md:text-[10px] text-cyan-300/60 text-center">
+                            {isMobile ? 'Tap for details' : 'Click for details'}
+                          </p>
                         </div>
                       </div>
                       
-                      {'category' in hoveredSkill && hoveredSkill.category && (
-                        <div className="flex items-center justify-between">
-                          <span className="text-xs text-cyan-400/70">Category</span>
-                          <span className="text-xs font-semibold text-cyan-300 px-1.5 py-0.5 bg-cyan-500/10 rounded">
-                            {hoveredSkill.category}
-                          </span>
-                        </div>
+                      {/* Tooltip arrow - positioned based on side */}
+                      {pos.side === 'right' && (
+                        <div 
+                          className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 w-2 h-2 transform rotate-45"
+                          style={{ 
+                            backgroundColor: '#0f172a',
+                            borderLeft: '1px solid rgba(96, 165, 250, 0.5)',
+                            borderBottom: '1px solid rgba(96, 165, 250, 0.5)'
+                          }}
+                        />
                       )}
-                      
-                      {hoveredSkill.learned && (
-                        <div className="flex items-center justify-between">
-                          <span className="text-xs text-cyan-400/70">Learned</span>
-                          <span className="text-xs font-medium text-white">{hoveredSkill.learned}</span>
-                        </div>
+                      {pos.side === 'left' && (
+                        <div 
+                          className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 w-2 h-2 transform rotate-45"
+                          style={{ 
+                            backgroundColor: '#0f172a',
+                            borderRight: '1px solid rgba(96, 165, 250, 0.5)',
+                            borderTop: '1px solid rgba(96, 165, 250, 0.5)'
+                          }}
+                        />
                       )}
-                    </div>
-                    
-                    <div className="mt-2 pt-2 border-t border-cyan-500/20">
-                      <p className="text-[10px] text-cyan-300/60 text-center">
-                        Click for more details
-                      </p>
-                    </div>
-                  </div>
-                  
-                  {/* Tooltip arrow */}
-                  <div 
-                    className="absolute -bottom-1.5 left-4 w-5 h-3 transform rotate-45"
-                    style={{ 
-                      backgroundColor: '#0f172a',
-                      borderRight: '1px solid rgba(96, 165, 250, 0.5)',
-                      borderBottom: '1px solid rgba(96, 165, 250, 0.5)'
-                    }}
-                  />
-                </motion.div>
-              </foreignObject>
+                      {pos.side === 'top' && (
+                        <div 
+                          className="absolute left-1/2 bottom-0 -translate-x-1/2 translate-y-1/2 w-2 h-2 transform rotate-45"
+                          style={{ 
+                            backgroundColor: '#0f172a',
+                            borderTop: '1px solid rgba(96, 165, 250, 0.5)',
+                            borderRight: '1px solid rgba(96, 165, 250, 0.5)'
+                          }}
+                        />
+                      )}
+                      {pos.side === 'bottom' && (
+                        <div 
+                          className="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2 w-2 h-2 transform rotate-45"
+                          style={{ 
+                            backgroundColor: '#0f172a',
+                            borderBottom: '1px solid rgba(96, 165, 250, 0.5)',
+                            borderLeft: '1px solid rgba(96, 165, 250, 0.5)'
+                          }}
+                        />
+                      )}
+                    </motion.div>
+                  </foreignObject>
+                );
+              })()
             )}
           </svg>
         </div>
@@ -945,8 +1033,8 @@ const SkillsTree = () => {
           <div
             className="fixed z-50 pointer-events-none"
             style={{
-              left: `${clickTooltip.x + 15}px`,
-              top: `${clickTooltip.y + 15}px`,
+              left: `${Math.min(clickTooltip.x + 15, window.innerWidth - 250)}px`,
+              top: `${Math.min(clickTooltip.y + 15, window.innerHeight - 100)}px`,
               transform: 'translateZ(0)',
               willChange: 'left, top'
             }}
@@ -956,22 +1044,22 @@ const SkillsTree = () => {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.8, y: 5 }}
               transition={{ duration: 0.2 }}
-              className="bg-slate-900/95 backdrop-blur-xl px-4 py-3 rounded-lg border border-cyan-400"
+              className="bg-slate-900/95 backdrop-blur-xl px-3 py-2 rounded-lg border border-cyan-400"
               style={{ boxShadow: '0 0 30px rgba(96, 165, 250, 0.6)' }}
             >
               <div className="flex items-center gap-2 mb-1">
-                <span className="text-xl">{clickTooltip.skill.icon}</span>
-                <h3 className="text-base font-bold text-cyan-300"
+                <span className="text-lg">{clickTooltip.skill.icon}</span>
+                <h3 className="text-sm font-bold text-cyan-300"
                     style={{ textShadow: '0 0 10px rgba(96, 165, 250, 0.6)' }}>
                   {clickTooltip.skill.name}
                 </h3>
               </div>
-              <div className="flex items-center gap-2 mt-1">
+              <div className="flex items-center gap-2">
                 <span className="text-cyan-400/70 text-xs">Proficiency:</span>
-                <span className="text-white font-bold text-base">{clickTooltip.skill.proficiency}%</span>
+                <span className="text-white font-bold text-sm">{clickTooltip.skill.proficiency}%</span>
               </div>
               <motion.p 
-                className="text-cyan-300/80 text-xs mt-2"
+                className="text-cyan-300/80 text-[10px] mt-1"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.3 }}
@@ -989,7 +1077,7 @@ const SkillsTree = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+              className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-3 md:p-4"
               onClick={() => setSelectedSkill(null)}
             >
               <motion.div
@@ -997,23 +1085,23 @@ const SkillsTree = () => {
                 animate={{ scale: 1, y: 0 }}
                 exit={{ scale: 0.9, y: 20 }}
                 onClick={(e) => e.stopPropagation()}
-                className="bg-slate-900/95 backdrop-blur-xl rounded-2xl border-2 border-cyan-400 p-8 max-w-2xl w-full relative"
+                className="bg-slate-900/95 backdrop-blur-xl rounded-lg md:rounded-xl border-2 border-cyan-400 p-3 md:p-5 max-w-[90vw] md:max-w-lg w-full relative max-h-[80vh] md:max-h-[85vh] overflow-y-auto"
                 style={{ boxShadow: '0 0 100px rgba(96, 165, 250, 0.5)' }}
               >
                 <button
                   onClick={() => setSelectedSkill(null)}
-                  className="absolute top-4 right-4 text-cyan-400 hover:text-white transition-colors"
+                  className="absolute top-2 right-2 md:top-3 md:right-3 text-cyan-400 hover:text-white transition-colors z-10"
                 >
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                     <path d="M18 6L6 18M6 6l12 12"/>
                   </svg>
                 </button>
 
-                <div className="mb-6">
-                  <div className="flex items-center gap-3 mb-2">
-                    <span className="text-4xl">{selectedSkill.icon}</span>
+                <div className="mb-3 md:mb-4">
+                  <div className="flex items-center gap-2 md:gap-3 mb-1 md:mb-2">
+                    <span className="text-2xl md:text-3xl">{selectedSkill.icon}</span>
                     <motion.h2 
-                      className="text-5xl font-bold text-white"
+                      className="text-xl md:text-3xl font-bold text-white"
                       style={{ textShadow: '0 0 30px rgba(96, 165, 250, 0.8)' }}
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
@@ -1024,7 +1112,7 @@ const SkillsTree = () => {
                   </div>
                   {'category' in selectedSkill && selectedSkill.category && (
                     <motion.span 
-                      className="inline-block px-4 py-1 rounded-full text-xs font-semibold uppercase tracking-wider bg-cyan-500/20 text-cyan-300 border border-cyan-500/30"
+                      className="inline-block px-2 py-0.5 md:px-3 md:py-1 rounded-full text-[10px] md:text-xs font-semibold uppercase tracking-wider bg-cyan-500/20 text-cyan-300 border border-cyan-500/30"
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: 0.2 }}
@@ -1035,15 +1123,15 @@ const SkillsTree = () => {
                 </div>
 
                 <motion.div 
-                  className="space-y-6"
+                  className="space-y-3 md:space-y-4"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.3 }}
                 >
                   <div>
-                    <h3 className="text-cyan-400 text-sm font-semibold uppercase tracking-wider mb-3">Proficiency Level</h3>
-                    <div className="flex items-center gap-4">
-                      <div className="flex-1 bg-slate-800 h-4 rounded-full overflow-hidden border border-cyan-400/40">
+                    <h3 className="text-cyan-400 text-xs md:text-sm font-semibold uppercase tracking-wider mb-1 md:mb-2">Proficiency Level</h3>
+                    <div className="flex items-center gap-2 md:gap-3">
+                      <div className="flex-1 bg-slate-800 h-2.5 md:h-3 rounded-full overflow-hidden border border-cyan-400/40">
                         <motion.div
                           initial={{ width: 0 }}
                           animate={{ width: `${selectedSkill.proficiency}%` }}
@@ -1058,7 +1146,7 @@ const SkillsTree = () => {
                           />
                         </motion.div>
                       </div>
-                      <span className="text-white font-bold text-2xl tabular-nums min-w-[4rem] text-right">
+                      <span className="text-white font-bold text-base md:text-xl tabular-nums min-w-[2.5rem] md:min-w-[3rem] text-right">
                         {selectedSkill.proficiency}%
                       </span>
                     </div>
@@ -1066,34 +1154,34 @@ const SkillsTree = () => {
 
                   {selectedSkill.learned && (
                     <div>
-                      <h3 className="text-cyan-400 text-sm font-semibold uppercase tracking-wider mb-2">Learning Journey</h3>
-                      <p className="text-slate-300 text-lg">Started in <span className="text-white font-bold">{selectedSkill.learned}</span></p>
+                      <h3 className="text-cyan-400 text-xs md:text-sm font-semibold uppercase tracking-wider mb-1">Learning Journey</h3>
+                      <p className="text-slate-300 text-sm md:text-base">Started in <span className="text-white font-bold">{selectedSkill.learned}</span></p>
                     </div>
                   )}
 
                   {'usedIn' in selectedSkill && selectedSkill.usedIn && (
                     <div>
-                      <h3 className="text-cyan-400 text-sm font-semibold uppercase tracking-wider mb-2">Applied In</h3>
-                      <p className="text-slate-300 text-lg">{selectedSkill.usedIn}</p>
+                      <h3 className="text-cyan-400 text-xs md:text-sm font-semibold uppercase tracking-wider mb-1">Applied In</h3>
+                      <p className="text-slate-300 text-sm md:text-base">{selectedSkill.usedIn}</p>
                     </div>
                   )}
 
                   {selectedSkill.story && (
                     <div>
-                      <h3 className="text-cyan-400 text-sm font-semibold uppercase tracking-wider mb-2">Experience Story</h3>
-                      <p className="text-slate-200 text-lg leading-relaxed">{selectedSkill.story}</p>
+                      <h3 className="text-cyan-400 text-xs md:text-sm font-semibold uppercase tracking-wider mb-1">Experience Story</h3>
+                      <p className="text-slate-200 text-sm md:text-base leading-relaxed">{selectedSkill.story}</p>
                     </div>
                   )}
                 </motion.div>
 
                 <motion.div 
-                  className="mt-8 pt-6 border-t border-cyan-500/20"
+                  className="mt-4 md:mt-5 pt-3 md:pt-4 border-t border-cyan-500/20"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.4 }}
                 >
-                  <p className="text-cyan-300/60 text-sm text-center">
-                    Click outside or press ESC to close
+                  <p className="text-cyan-300/60 text-[10px] md:text-xs text-center">
+                    {isMobile ? 'Tap outside to close' : 'Click outside or press ESC to close'}
                   </p>
                 </motion.div>
               </motion.div>
@@ -1106,9 +1194,9 @@ const SkillsTree = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 3 }}
-          className="text-center text-cyan-400/60 mt-12 text-sm tracking-wide"
+          className="text-center text-cyan-400/60 mt-3 md:mt-6 text-[10px] md:text-sm tracking-wide px-2"
         >
-          Hover nodes for info • Click for detailed stories • Energy flow visualizes skill mastery
+          {isMobile ? 'Tap nodes for info • Energy flow shows mastery' : 'Hover nodes for info • Click for detailed stories • Energy flow visualizes skill mastery'}
         </motion.p>
       </div>
     </div>
