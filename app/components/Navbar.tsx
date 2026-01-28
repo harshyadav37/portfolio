@@ -1,38 +1,22 @@
 "use client";
 
 import React, { useState } from "react";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
+import { usePathname } from "next/navigation";
 
 const navItems = [
-  { label: "Home", href: "#home" },
-  { label: "About", href: "#about" },
-  { label: "Projects", href: "#projects" },
-  { label: "Skills", href: "#experience" },
-  { label: "Contact", href: "#contact" },
+  { label: "Home", href: "/" },
+  { label: "About", href: "/about" },
+  { label: "Projects", href: "/projects" },
+  { label: "Skills", href: "/experience" },
+  { label: "Contact", href: "/contact" },
 ];
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
-
-  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>, href: string) => {
-    e.preventDefault();
-    setIsOpen(false);
-    
-    // Extract the section ID from href (e.g., "#home" -> "home")
-    const sectionId = href.replace("#", "");
-    const element = document.getElementById(sectionId);
-    
-    if (element) {
-      // Smooth scroll to the element
-      setTimeout(() => {
-        element.scrollIntoView({ behavior: "smooth", block: "start" });
-      }, 100);
-    } else if (sectionId === "home") {
-      // Fallback for home
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
-  };
+  const pathname = usePathname();
 
   return (
     <motion.nav
@@ -54,17 +38,27 @@ export default function Navbar() {
 
           {/* Desktop Nav - Only show on large screens */}
           <div className="hidden lg:flex items-center gap-2">
-            {navItems.map((item) => (
-              <motion.a
-                key={item.href}
-                href={item.href}
-                onClick={(e) => handleNavClick(e, item.href)}
-                whileHover={{ y: -2 }}
-                className="px-4 py-2 rounded-full text-slate-200 hover:text-black hover:bg-white transition-all duration-300 cursor-pointer text-sm"
-              >
-                {item.label}
-              </motion.a>
-            ))}
+            {navItems.map((item) => {
+              const isActive = pathname === item.href;
+              return (
+                <motion.div
+                  key={item.href}
+                  whileHover={{ y: -2 }}
+                  className="cursor-pointer"
+                >
+                  <Link
+                    href={item.href}
+                    className={`px-4 py-2 rounded-full transition-all duration-300 text-sm ${
+                      isActive
+                        ? "bg-white text-black font-semibold"
+                        : "text-slate-200 hover:text-black hover:bg-white"
+                    }`}
+                  >
+                    {item.label}
+                  </Link>
+                </motion.div>
+              );
+            })}
           </div>
 
           {/* Mobile Toggle - Show on medium and smaller screens */}
@@ -89,16 +83,23 @@ export default function Navbar() {
         className="lg:hidden mt-4 backdrop-blur-xl bg-black/50 border border-white/10 rounded-2xl overflow-hidden"
       >
         <div className="flex flex-col items-center gap-4 py-6">
-          {navItems.map((item) => (
-            <a
-              key={item.href}
-              href={item.href}
-              onClick={(e) => handleNavClick(e, item.href)}
-              className="text-slate-200 hover:text-white text-lg transition cursor-pointer"
-            >
-              {item.label}
-            </a>
-          ))}
+          {navItems.map((item) => {
+            const isActive = pathname === item.href;
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                onClick={() => setIsOpen(false)}
+                className={`text-lg transition cursor-pointer ${
+                  isActive
+                    ? "text-white font-semibold"
+                    : "text-slate-200 hover:text-white"
+                }`}
+              >
+                {item.label}
+              </Link>
+            );
+          })}
         </div>
       </motion.div>
     </motion.nav>

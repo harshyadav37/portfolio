@@ -1,12 +1,16 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import TiltedCard from "./ui/TiltedCard";
 import RotatingText from "./ui/RotatingText";
+import { ResumeModal } from "./ui/ResumeModal";
 
 export const Hero: React.FC = () => {
+  const [isResumeModalOpen, setIsResumeModalOpen] = useState(false);
+
   return (
     <section
       id="home"
@@ -67,27 +71,30 @@ export const Hero: React.FC = () => {
 
           {/* CTA BUTTONS */}
           <div className="flex flex-col xs:flex-row gap-3 sm:gap-4 pt-2 sm:pt-4">
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="
-                px-6 sm:px-8 
-                py-3 sm:py-4 
-                text-sm sm:text-base md:text-lg
-                bg-gradient-to-r from-purple-600 via-blue-500 to-cyan-400
-                hover:shadow-[0_0_30px_rgba(96,165,250,0.6)]
-                text-white font-bold font-medium rounded-lg
-                transition-all duration-300 
-                flex items-center gap-2 justify-center
-                w-[50%] xs:w-auto
-              "
-            >
-              View Projects <ArrowRight size={18} className="w-4 h-4 sm:w-5 sm:h-5" />
-            </motion.button>
+            <Link href="/projects">
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="
+                  px-6 sm:px-8 
+                  py-3 sm:py-4 
+                  text-sm sm:text-base md:text-lg
+                  bg-gradient-to-r from-purple-600 via-blue-500 to-cyan-400
+                  hover:shadow-[0_0_30px_rgba(96,165,250,0.6)]
+                  text-white font-bold font-medium rounded-lg
+                  transition-all duration-300 
+                  flex items-center gap-2 justify-center
+                  w-[50%] xs:w-auto
+                "
+              >
+                View Projects <ArrowRight size={18} className="w-4 h-4 sm:w-5 sm:h-5" />
+              </motion.button>
+            </Link>
 
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
+              onClick={() => setIsResumeModalOpen(true)}
               className="
                 px-6 sm:px-8 
                 py-3 sm:py-4 
@@ -99,7 +106,7 @@ export const Hero: React.FC = () => {
                 w-[50%] xs:w-auto
               "
             >
-              Contact Me
+              Resume <ArrowRight size={18} className="w-4 h-4 sm:w-5 sm:h-5" />
             </motion.button>
           </div>
         </motion.div>
@@ -118,6 +125,9 @@ export const Hero: React.FC = () => {
           />
         </motion.div>
       </div>
+
+      {/* Resume Modal */}
+      <ResumeModal isOpen={isResumeModalOpen} onClose={() => setIsResumeModalOpen(false)} />
     </section>
   );
 };

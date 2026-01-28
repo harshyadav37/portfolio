@@ -29,7 +29,7 @@ export default function Home() {
       <div id="home" style={{ width: '100%', minHeight: '100vh', position: 'relative',  }}>
         {/* Floating background - positioned absolutely behind everything */}
         <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 0 }}>
-          <FloatingLines lineCount={8} />
+          <FloatingLines lineCount={4} />
         </div>
         
         {/* Hero section */}

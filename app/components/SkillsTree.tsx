@@ -374,7 +374,7 @@ const SkillsTree = () => {
   };
 
   return (
-    <div ref={containerRef} className="min-h-screen relative overflow-hidden" 
+    <div ref={containerRef} className="min-h-screen relative  overflow-hidden" 
          style={{ background: 'linear-gradient(to bottom, #0f172a 0%, #1e293b 50%, #334155 100%)' }}
          onMouseMove={handleMouseMove}
     >
@@ -382,7 +382,7 @@ const SkillsTree = () => {
         <motion.h1 
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-2xl md:text-5xl font-bold text-center mb-1 md:mb-2 text-white pt-2 md:pt-4"
+          className="text-2xl md:text-5xl mt-15 font-bold text-center mb-1 md:mb-2 text-white pt-2 md:pt-4"
           style={{
             textShadow: '0 0 40px rgba(96, 165, 250, 0.8), 0 0 80px rgba(96, 165, 250, 0.4)'
           }}

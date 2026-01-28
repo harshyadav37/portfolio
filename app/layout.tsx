@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Inter, Space_Grotesk } from "next/font/google";
 import "./globals.css";
+import Navbar from "./components/Navbar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -67,6 +68,12 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} ${spaceGrotesk.variable} antialiased bg-slate-950 text-slate-100 overflow-x-hidden`}
       >
+        {/* Fixed Navbar */}
+        <div className='flex items-center justify-center' style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 50, padding: '20px 0' }}>
+          <div className="w-[80%] md:w-[60%]">
+            <Navbar />
+          </div>
+        </div>
         {children}
       </body>
     </html>

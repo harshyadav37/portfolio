@@ -1,16 +1,12 @@
 'use client';
-
-import React from 'react';
-import { Projects } from '../components/Projects';
+import { Contact } from '../components/Contact';
 import { Footer } from '../components/Footer';
 
-const Page = () => {
+export default function ContactPage() {
   return (
     <main className="min-h-screen w-full ">
-      <Projects />
+      <Contact />
       <Footer />
     </main>
   );
-};
-
-export default Page;
+}
