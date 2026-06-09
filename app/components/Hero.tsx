@@ -7,6 +7,7 @@ import { ArrowRight } from "lucide-react";
 import TiltedCard from "./ui/TiltedCard";
 import RotatingText from "./ui/RotatingText";
 import { ResumeModal } from "./ui/ResumeModal";
+import VideoModal from "./VideoModal";
 
 export const Hero: React.FC = () => {
   const [isResumeModalOpen, setIsResumeModalOpen] = useState(false);
@@ -112,7 +113,7 @@ export const Hero: React.FC = () => {
         </motion.div>
 
         {/* RIGHT: TILTED IMAGE - Hidden on mobile, visible from lg screen */}
-        <motion.div
+        {/* <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.6, ease: "easeOut", delay: 0.2 }}
@@ -123,7 +124,9 @@ export const Hero: React.FC = () => {
             scaleOnHover={1.2}
             // className="w-full max-w-md xl:max-w-lg"
           />
-        </motion.div>
+        </motion.div> */}
+
+        <VideoModal />
       </div>
 
       {/* Resume Modal */}
