@@ -1,315 +1,117 @@
-'use client';
 
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import { Card } from './ui/Card';
-import { Mail, MessageSquare, Phone, MapPin, Github, Linkedin, Instagram } from 'lucide-react';
+"use client";
+import React, { useRef, useState } from "react";
+import emailjs from "@emailjs/browser";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-const contactMethods = [
-  {
-    icon: Mail,
-    label: 'Email',
-    value: 'hy050712@gmail.com',
-    href: 'mailto:hello@example.com',
-  },
-  {
-    icon: Phone,
-    label: 'Phone',
-    value: '+91 9302446449',
-    href: 'tel:+15551234567',
-  },
-  {
-    icon: MapPin,
-    label: 'Location',
-    value: 'Indore',
-    href: '#',
-  },
-];
+const Contact = () => {
+  const form = useRef();
+  const [isSent, setIsSent] = useState(false);
 
-const socialLinks = [
-  {
-    icon: Github,
-    href: 'https://github.com/harshyadav37',
-    label: 'GitHub',
-  },
-  {
-    icon: Linkedin,
-    href: 'https://www.linkedin.com/in/harsh-yadav-a8a90826b/',
-    label: 'LinkedIn',
-  },
-  {
-    icon: Instagram,
-    href: 'https://www.instagram.com/harshyadav89_/',
-    label: 'Instagram',
-  },
-];
-
-export const Contact: React.FC = () => {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    subject: '',
-    message: '',
-  });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
-
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const sendEmail = (e) => {
     e.preventDefault();
-    setIsSubmitting(true);
 
-    try {
-      // Simulate form submission
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-      setSubmitStatus('success');
-      setFormData({ name: '', email: '', subject: '', message: '' });
-      setTimeout(() => setSubmitStatus('idle'), 3000);
-    } catch {
-      setSubmitStatus('error');
-      setTimeout(() => setSubmitStatus('idle'), 3000);
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.5 },
-    },
+    emailjs
+      .sendForm(
+        "service_axbtt7a",  // Replace with your EmailJS Service ID
+        "template_1ziboq3",  // Replace with your EmailJS Template ID
+        form.current,
+        "Rz7W9pVF0HdDryNNL"  // Replace with your EmailJS Public Key
+      )
+      .then(
+        () => {
+          setIsSent(true);
+          form.current.reset(); // Reset form fields after sending
+          toast.success("Message sent successfully! ✅", {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            theme: "dark",
+          });
+        },
+        (error) => {
+          console.error("Error sending message:", error);
+          toast.error("Failed to send message. Please try again.", {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            theme: "dark",
+          });
+        }
+      );
   };
 
   return (
-    <section id="contact" className="section-padding relative overflow-hidden">
-      <div className="container-custom">
-        {/* Section Header */}
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="mb-16 text-center"
-        >
-          <h2 className="text-4xl md:text-5xl font-bold mb-4">
-            <span className="gradient-text">Get In Touch</span>
-          </h2>
-          <p className="text-slate-400 text-lg max-w-2xl mx-auto">
-            Have a project in mind? Let's collaborate and create something amazing together.
-          </p>
-        </motion.div>
+    <section
+      id="contact"
+      className="flex flex-col items-center justify-center py-24 px-[12vw] md:px-[7vw] lg:px-[20vw]"
+    >
+      {/* Toast Container */}
+      <ToastContainer />
 
-        <div className="grid lg:grid-cols-3 gap-12">
-          {/* Contact Information */}
-          <motion.div
-            className="lg:col-span-1"
-            variants={containerVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
+      {/* Section Title */}
+      <div className="text-center mb-16">
+        <h2 className="text-4xl font-bold text-white">CONTACT</h2>
+        <div className="w-32 h-1 bg-purple-500 mx-auto mt-4"></div>
+        <p className="text-gray-400 mt-4 text-lg font-semibold">
+          I’d love to hear from you—reach out for any opportunities or questions!
+        </p>
+      </div>
+
+      {/* Contact Form */}
+      <div className="mt-8 w-full max-w-md bg-[#0d081f] p-6 rounded-lg shadow-lg border border-gray-700">
+        <h3 className="text-xl font-semibold text-white text-center">
+          Connect With Me <span className="ml-1">🚀</span>
+        </h3>
+
+        <form ref={form} onSubmit={sendEmail} className="mt-4 flex flex-col space-y-4">
+          <input
+            type="email"
+            name="user_email"
+            placeholder="Your Email"
+            required
+            className="w-full p-3 rounded-md bg-[#131025] text-white border border-gray-600 focus:outline-none focus:border-purple-500"
+          />
+          <input
+            type="text"
+            name="user_name"
+            placeholder="Your Name"
+            required
+            className="w-full p-3 rounded-md bg-[#131025] text-white border border-gray-600 focus:outline-none focus:border-purple-500"
+          />
+          <input
+            type="text"
+            name="subject"
+            placeholder="Subject"
+            required
+            className="w-full p-3 rounded-md bg-[#131025] text-white border border-gray-600 focus:outline-none focus:border-purple-500"
+          />
+          <textarea
+            name="message"
+            placeholder="Message"
+            rows="4"
+            required
+            className="w-full p-3 rounded-md bg-[#131025] text-white border border-gray-600 focus:outline-none focus:border-purple-500"
+          />
+          
+          {/* Send Button */}
+          <button
+            type="submit"
+            className="w-full bg-gradient-to-r from-purple-600 to-pink-500 py-3 text-white font-semibold rounded-md hover:opacity-90 transition"
           >
-            {/* Contact Methods */}
-            <div className="space-y-6 mb-12">
-              {contactMethods.map((method, index) => {
-                const Icon = method.icon;
-                return (
-                  <motion.a
-                    key={method.label}
-                    href={method.href}
-                    variants={itemVariants}
-                    whileHover={{ x: 8 }}
-                    className="flex items-start gap-4 group"
-                  >
-                    <div className="flex-shrink-0 mt-1">
-                      <div className="p-3 rounded-lg bg-purple-500/10 text-purple-400 group-hover:bg-purple-500/20 transition-colors">
-                        <Icon size={20} />
-                      </div>
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-slate-100 mb-1">{method.label}</h4>
-                      <p className="text-slate-400 text-sm hover:text-cyan-400 transition-colors">
-                        {method.value}
-                      </p>
-                    </div>
-                  </motion.a>
-                );
-              })}
-            </div>
-
-            {/* Social Links */}
-            <motion.div variants={itemVariants}>
-              <h3 className="font-semibold text-slate-100 mb-4">Follow Me</h3>
-              <div className="flex gap-4">
-                {socialLinks.map((link) => {
-                  const Icon = link.icon;
-                  return (
-                    <motion.a
-                      key={link.label}
-                      href={link.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      whileHover={{ scale: 1.2, rotate: 5 }}
-                      whileTap={{ scale: 0.9 }}
-                      className="p-3 rounded-lg bg-white/5 hover:bg-purple-500/20 text-slate-400 hover:text-purple-400 transition-all duration-300"
-                      aria-label={link.label}
-                    >
-                      <Icon size={20} />
-                    </motion.a>
-                  );
-                })}
-              </div>
-            </motion.div>
-          </motion.div>
-
-          {/* Contact Form */}
-          <motion.div
-            className="lg:col-span-2"
-            initial={{ opacity: 0, x: 20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            <Card className="border-purple-500/20 hover:border-purple-500/40">
-              <form onSubmit={handleSubmit} className="space-y-6">
-                {/* Name Field */}
-                <div>
-                  <label htmlFor="name" className="block text-sm font-medium text-slate-200 mb-2">
-                    Your Name
-                  </label>
-                  <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    required
-                    className="w-full px-4 py-3 rounded-lg bg-slate-800/50 border border-slate-700 text-slate-100 placeholder-slate-500 focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition-all duration-300"
-                    placeholder="John Doe"
-                  />
-                </div>
-
-                {/* Email Field */}
-                <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-slate-200 mb-2">
-                    Your Email
-                  </label>
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    required
-                    className="w-full px-4 py-3 rounded-lg bg-slate-800/50 border border-slate-700 text-slate-100 placeholder-slate-500 focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition-all duration-300"
-                    placeholder="john@example.com"
-                  />
-                </div>
-
-                {/* Subject Field */}
-                <div>
-                  <label htmlFor="subject" className="block text-sm font-medium text-slate-200 mb-2">
-                    Subject
-                  </label>
-                  <input
-                    type="text"
-                    id="subject"
-                    name="subject"
-                    value={formData.subject}
-                    onChange={handleChange}
-                    required
-                    className="w-full px-4 py-3 rounded-lg bg-slate-800/50 border border-slate-700 text-slate-100 placeholder-slate-500 focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition-all duration-300"
-                    placeholder="Project Inquiry"
-                  />
-                </div>
-
-                {/* Message Field */}
-                <div>
-                  <label htmlFor="message" className="block text-sm font-medium text-slate-200 mb-2">
-                    Message
-                  </label>
-                  <textarea
-                    id="message"
-                    name="message"
-                    value={formData.message}
-                    onChange={handleChange}
-                    required
-                    rows={5}
-                    className="w-full px-4 py-3 rounded-lg bg-slate-800/50 border border-slate-700 text-slate-100 placeholder-slate-500 focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition-all duration-300 resize-none"
-                    placeholder="Tell me about your project..."
-                  />
-                </div>
-
-                {/* Status Messages */}
-                {submitStatus === 'success' && (
-                  <motion.div
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="p-4 rounded-lg bg-emerald-500/10 border border-emerald-500/50 text-emerald-300 text-sm"
-                  >
-                    ✓ Message sent successfully! I'll get back to you soon.
-                  </motion.div>
-                )}
-                {submitStatus === 'error' && (
-                  <motion.div
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="p-4 rounded-lg bg-red-500/10 border border-red-500/50 text-red-300 text-sm"
-                  >
-                    ✗ Something went wrong. Please try again.
-                  </motion.div>
-                )}
-
-                {/* Submit Button */}
-                <motion.button
-                  type="submit"
-                  disabled={isSubmitting}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className={`
-                    w-full px-8 py-4 text-lg font-medium rounded-lg 
-                    transition-all duration-300 flex items-center gap-2 justify-center
-                    bg-gradient-to-r from-purple-600 via-blue-500 to-cyan-400
-                    hover:shadow-[0_0_30px_rgba(96,165,250,0.6)]
-                    text-white font-bold
-                    disabled:opacity-50 disabled:cursor-not-allowed
-                  `}
-                >
-                  {isSubmitting && (
-                    <motion.div
-                      animate={{ rotate: 360 }}
-                      transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
-                      className="w-5 h-5 border-2 border-current border-t-transparent rounded-full"
-                    />
-                  )}
-                  {!isSubmitting && <MessageSquare size={20} />}
-                  {isSubmitting ? 'Sending...' : 'Send Message'}
-                </motion.button>
-              </form>
-            </Card>
-          </motion.div>
-        </div>
+            Send
+          </button>
+        </form>
       </div>
     </section>
   );
 };
+
+export default Contact;

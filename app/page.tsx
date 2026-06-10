@@ -1,12 +1,16 @@
 'use client';
 import Navbar from './components/Navbar';
-import { Hero } from './components/Hero';
+// import { Hero } from './components/Hero';
 import  About  from './components/About';
-import { Projects } from './components/Projects';
-import  Experience  from './components/SkillsTree';
-import { Contact } from './components/Contact';
+import  Projects  from './components/Projects';
+import  Skills  from './components/SkillsTree';
+import Contact  from './components/Contact';
 import { Footer } from './components/Footer';
-import FloatingLines from './components/ui/Floatingbg';
+import Experience from './components/Experience';
+import Education from './components/Education';
+
+
+import BlurBlob from './components/ui/BlurBlob';
 
 export default function Home() {
   const items = [
@@ -17,30 +21,29 @@ export default function Home() {
     { label: 'Contact', href: '#contact' },
   ];
   return (
-    <main className="min-h-screen w-full">
-      {/* Fixed Navbar - 80% width on mobile, 60% on desktop */}
-      <div className='flex items-center justify-center' style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 50, padding: '20px 0' }}>
-        <div className="w-[80%] md:w-[60%]">
-          <Navbar />
-        </div>
-      </div>
+    <main className="bg-[#050414]">
+    
+      <BlurBlob position={{ top: '35%', left: '20%' }} size={{ width: '30%', height: '40%' }} />
+      
+   <div className="absolute inset-0 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-[size:14px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]"></div>
+   
 
-      {/* Hero section with FloatingLines background */}
-      <div id="home" style={{ width: '100%', minHeight: '100vh', position: 'relative',  }}>
-        {/* Floating background - positioned absolutely behind everything */}
-        {/* <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 0 }}>
-          <FloatingLines lineCount={4} />
-        </div> */}
-        
-        {/* Hero section */}
-        <div  className='bg-[black]' style={{ position: 'relative', zIndex: 20 }}><Hero /></div>
+      
+      <div className="relative pt-20">
+        <Navbar/>
+        <section id="about"><About /></section>
+        <section id="skills"><Skills /></section>
+        <section id="projects"><Projects /></section>
+        <section id="experience"><Experience /></section>
+        <section id="education"><Education /></section>
+         {/* <section id="about"><About /></section> */}
+      
+      {/* <section id="experience"><Experience /></section> */}
+      <section id="contact"><Contact /></section>
+      {/* <Footer /> */}
       </div>
       
-      <section id="about"><About /></section>
-      <section id="projects"><Projects /></section>
-      <section id="experience"><Experience /></section>
-      <section id="contact"><Contact /></section>
-      <Footer />
+     
     </main>
   );
 }
