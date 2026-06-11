@@ -3,9 +3,20 @@ import React, { useState } from "react";
 import { projects } from "../../app/constants";
 
 const Work = () => {
-  const [selectedProject, setSelectedProject] = useState(null);
+  interface Project {
+  title: string;
+  description: string;
+   tags: string[];
+  github: string;
+  demo?: string;
+  webapp: string;
+    image: {
+    src: string;
+  };
+}
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
-  const handleOpenModal = (project) => {
+  const handleOpenModal = (project:any) => {
     setSelectedProject(project);
   };
 

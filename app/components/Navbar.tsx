@@ -19,7 +19,7 @@ const Navbar = () => {
   }, []);
 
   // Smooth scroll function
-  const handleMenuItemClick = (sectionId) => {
+  const handleMenuItemClick = (sectionId:string) => {
     setActiveSection(sectionId);
     setIsOpen(false);
 

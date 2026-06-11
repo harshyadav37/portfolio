@@ -15,9 +15,23 @@ const config: Config = {
           '66%': { transform: 'scale(0.8)' },
           '100%': { transform: 'scale(1)' },
         },
+         "fade-in": {
+           "0%": { opacity: "0" },
+           "100%": { opacity: "1" },
       },
           animation: {
         blob: 'blob 10s infinite',
+          "fade-in": "fade-in 0.5s ease-in-out",
+         "fade-in-up": "fade-in-up 0.6s ease-out",
+         "fade-in-down": "fade-in-down 0.6s ease-out",
+         "slide-in-left": "slide-in-left 0.5s ease-out",
+         "slide-in-right": "slide-in-right 0.5s ease-out",
+         "pulse-glow": "pulse-glow 2s ease-in-out infinite",
+         "float": "float 3s ease-in-out infinite",
+         "glow-pulse": "glow-pulse 3s ease-in-out infinite",
+         "slide-up": "slide-up 0.6s ease-out",
+         "shimmer": "shimmer 2s infinite",
+         "gradient-shift": "gradient-shift 3s ease infinite",
       },
          backgroundImage: {
         'skills-gradient': 'linear-gradient(38.73deg, rgba(204, 0, 187, 0.15) 0%, rgba(201, 32, 184, 0) 50%), linear-gradient(141.27deg, rgba(0, 70, 209, 0) 50%, rgba(0, 70, 209, 0.15) 100%)',
@@ -66,13 +80,13 @@ const config: Config = {
         inter: ["var(--font-inter)", "sans-serif"],
         grotesk: ["var(--font-space-grotesk)", "sans-serif"],
       },
-      backgroundImage: {
-        "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
-        "gradient-conic": "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
-        "glass-effect": "backdrop-filter: blur(10px)",
-        "glow-effect": "radial-gradient(circle at 50% 50%, rgba(147, 51, 234, 0.15) 0%, transparent 65%)",
-        "glow-cyan": "radial-gradient(circle at 50% 50%, rgba(6, 214, 214, 0.1) 0%, transparent 65%)",
-      },
+      // backgroundImage: {
+      //   "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
+      //   "gradient-conic": "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+      //   "glass-effect": "backdrop-filter: blur(10px)",
+      //   "glow-effect": "radial-gradient(circle at 50% 50%, rgba(147, 51, 234, 0.15) 0%, transparent 65%)",
+      //   "glow-cyan": "radial-gradient(circle at 50% 50%, rgba(6, 214, 214, 0.1) 0%, transparent 65%)",
+      // },
       boxShadow: {
         glow: "0 0 20px rgba(147, 51, 234, 0.3)",
         "glow-sm": "0 0 10px rgba(147, 51, 234, 0.2)",
@@ -81,24 +95,8 @@ const config: Config = {
         "glass": "0 8px 32px 0 rgba(31, 38, 135, 0.37)",
         "glass-sm": "0 4px 16px 0 rgba(31, 38, 135, 0.25)",
       },
-      animation: {
-        "fade-in": "fade-in 0.5s ease-in-out",
-        "fade-in-up": "fade-in-up 0.6s ease-out",
-        "fade-in-down": "fade-in-down 0.6s ease-out",
-        "slide-in-left": "slide-in-left 0.5s ease-out",
-        "slide-in-right": "slide-in-right 0.5s ease-out",
-        "pulse-glow": "pulse-glow 2s ease-in-out infinite",
-        "float": "float 3s ease-in-out infinite",
-        "glow-pulse": "glow-pulse 3s ease-in-out infinite",
-        "slide-up": "slide-up 0.6s ease-out",
-        "shimmer": "shimmer 2s infinite",
-        "gradient-shift": "gradient-shift 3s ease infinite",
-      },
-      keyframes: {
-        "fade-in": {
-          "0%": { opacity: "0" },
-          "100%": { opacity: "1" },
-        },
+   
+   
         "fade-in-up": {
           "0%": { opacity: "0", transform: "translateY(20px)" },
           "100%": { opacity: "1", transform: "translateY(0)" },

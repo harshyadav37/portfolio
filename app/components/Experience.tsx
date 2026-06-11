@@ -17,13 +17,21 @@ const highlights = [
   { icon: "🔗", title: "Full Stack Delivery", desc: "Shipped end-to-end features solo — from DB schema to deployed UI — across multiple client projects." },
   { icon: "🚀", title: "Performance & Optimization", desc: "Applied lazy loading, code splitting, and caching strategies to cut load times significantly." },
 ];
-
-function AnimatedBar({ level, color }) {
+interface AnimatedBarProps {
+  level: number;
+  color: string;
+}
+  interface CertificateModalProps {
+  onClose: () => void;
+}
+function AnimatedBar({ level, color }: AnimatedBarProps) {
   const [width, setWidth] = useState(0);
   useEffect(() => {
     const t = setTimeout(() => setWidth(level), 300);
     return () => clearTimeout(t);
   }, [level]);
+
+
   return (
     <div className="exp__bar-track">
       <div className="exp__bar-fill" style={{ width: `${width}%`, background: color }} />
@@ -31,7 +39,7 @@ function AnimatedBar({ level, color }) {
   );
 }
 
-function CertificateModal({ onClose }) {
+function CertificateModal({ onClose }: CertificateModalProps) {
   return (
     <div className="exp__modal-backdrop  clip-path-custom-2" onClick={onClose}>
       <div className="exp__modal-box" onClick={(e) => e.stopPropagation()}>

@@ -3,7 +3,7 @@ import { FaFacebook, FaTwitter, FaLinkedin, FaInstagram, FaYoutube } from "react
 
 const Footer = () => {
   // Smooth scroll function
-  const handleScroll = (sectionId) => {
+  const handleScroll = (sectionId:string) => {
     const section = document.getElementById(sectionId);
     if (section) {
       section.scrollIntoView({ behavior: "smooth" });
