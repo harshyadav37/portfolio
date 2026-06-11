@@ -71,12 +71,12 @@ function CertificateModal({ onClose }) {
                 <div className="exp__cert-dates">
                   <div className="exp__cert-date-col">
                     <p className="exp__cert-label">From</p>
-                    <p className="exp__cert-value">March 2024</p>
+                    <p className="exp__cert-value">JUNE 2025</p>
                   </div>
                   <div className="exp__cert-star">✦</div>
                   <div className="exp__cert-date-col">
                     <p className="exp__cert-label">To</p>
-                    <p className="exp__cert-value">October 2024</p>
+                    <p className="exp__cert-value">DECEMBER 2025</p>
                   </div>
                 </div>
               </div>
@@ -148,8 +148,8 @@ export default function ExperiencePage() {
               </div>
               <div className="exp__tenure-meta">
                 {[
-                  { icon:"📅", label:"Duration",    val:"Mar 2024 – Oct 2024" },
-                  { icon:"⏳", label:"Total Exp",   val:"8 Months" },
+                  { icon:"📅", label:"Duration",    val:"Jun 2025 – Dec 2025" },
+                  { icon:"⏳", label:"Total Exp",   val:"7 Months" },
                   { icon:"📍", label:"Location",    val:"Indore, M.P." },
                   { icon:"💼", label:"Type",        val:"Full-Time" },
                 ].map(({ icon, label, val }) => (
@@ -201,14 +201,14 @@ export default function ExperiencePage() {
         {/* ── Timeline ── */}
         <section className="exp__section">
           <p className="exp__section-eye">Journey</p>
-          <h2 className="exp__section-title">8-Month Timeline</h2>
+          <h2 className="exp__section-title">7-Month Timeline</h2>
           <div className="exp__timeline">
             {[
-              { month:"Mar 2024", title:"Joined as Full Stack Developer",   desc:"Onboarded, set up dev environment, contributed to UI components." },
-              { month:"Apr–May",  title:"First Production Features",        desc:"Built user auth flows with JWT and dynamic dashboard pages in Next.js." },
-              { month:"Jun–Jul",  title:"Backend Ownership",                desc:"Designed REST APIs in Node.js + Express, integrated MongoDB with Mongoose." },
-              { month:"Aug–Sep",  title:"Full Stack Projects",              desc:"Delivered two client projects end-to-end — from DB design to Vercel deployment." },
-              { month:"Oct 2024", title:"Certificate Awarded",              desc:"Completed 8 months, received experience certificate with outstanding rating." },
+              { month:"Jun 2025", title:"Joined as Mern Stack Developer",   desc:"Onboarded, set up dev environment, contributed to UI components." },
+              { month:"Jul–Aug",  title:"First Production Features",        desc:"Built user auth flows with JWT and dynamic dashboard pages in Next.js." },
+              { month:"Sep–Oct",  title:"Backend Ownership",                desc:"Designed REST APIs in Node.js + Express, integrated MongoDB with Mongoose." },
+              { month:"Nov–Dec",  title:"Full Stack Projects",              desc:"Delivered two client projects end-to-end — from DB design to Vercel deployment." },
+              { month:"Jan 2026", title:"Certificate Awarded",              desc:"Completed 7 months, received experience certificate with outstanding rating." },
             ].map((item, i) => (
               <div key={i} className="exp__timeline-item">
                 <div className="exp__timeline-dot" />

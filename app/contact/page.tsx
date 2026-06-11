@@ -1,12 +1,14 @@
-// 'use client';
-// import { Contact } from '../components/Contact';
-// import { Footer } from '../components/Footer';
+import React from 'react'
+import Contact from '../components/Contact'
+import Navbar from '../components/Navbar';
 
-// export default function ContactPage() {
-//   return (
-//     <main className="min-h-screen w-full ">
-//       <Contact />
-//       <Footer />
-//     </main>
-//   );
-// }
+const page = () => {
+  return (
+    <div>
+        <Navbar />
+      <Contact />
+    </div>
+  )
+}
+
+export default page
