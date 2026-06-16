@@ -161,7 +161,7 @@ export const SkillsInfo = [
       image: fitzone,
       tags: ["React JS", "API", "HTML", "CSS", "JavaScript", "Node.js", "MongoDB", "Express", "Tailwind CSS"],
       github: "https://github.com/harshyadav37/Gym-frontend",
-      webapp: "https://gym-project-ruddy-alpha.vercel.app/login",
+      webapp: "https://gym-frontend-a4io.onrender.com/",
     },
     {
       id: 3,
