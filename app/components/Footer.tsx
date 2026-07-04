@@ -16,7 +16,7 @@ const socialLinks = [
   { icon: Github, href: 'https://github.com/harshyadav37', label: 'GitHub' },
   { icon: Linkedin, href: 'https://www.linkedin.com/in/harsh-yadav-a8a90826b/', label: 'LinkedIn' },
   { icon: Instagram, href: 'https://www.instagram.com/harshyadav89_/', label: 'Instagram' },
-  // { icon: Mail, href: 'mailto:hello@example.com', label: 'Email' },
+  // { icon: Mail, href: 'mailto:hello@example.com', label: 'Email' mnbnmnb},
 ];
 
 export const Footer: React.FC = () => {
