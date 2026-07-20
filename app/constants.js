@@ -103,7 +103,7 @@ export const SkillsInfo = [
   },
 ];
 
-//  jhfhgf
+//  jhfhgfkkmnxbkjlnjkbl
   export const education = [
     {
       id: 0,
